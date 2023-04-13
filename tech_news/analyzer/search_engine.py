@@ -11,7 +11,6 @@ def search_by_title(title):
 # Requisito 8
 def search_by_date(date):
     try:
-        # date = datetime.strptime(date, "%Y-%m-%d").strftime("%d/%m/%Y")
         fdate = datetime.datetime.fromisoformat(date).strftime("%d/%m/%Y")
         result = search_news({"timestamp": fdate})
     except ValueError:
@@ -22,4 +21,5 @@ def search_by_date(date):
 
 # Requisito 9
 def search_by_category(category):
-    """Seu código deve vir aqui"""
+    result = search_news({"category": {"$regex": category, "$options": "i"}})
+    return [(news["title"], news["url"]) for news in result]
