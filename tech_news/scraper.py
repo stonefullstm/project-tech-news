@@ -1,6 +1,7 @@
 import requests
 import time
 from bs4 import BeautifulSoup
+from tech_news.database import create_news
 
 HEADERS = {
     "user-agent": "Fake user-agent"
@@ -71,9 +72,15 @@ def scrape_news(html_content):
     }
 
 
-# print(scrape_news(fetch("https://blog.betrybe.com/tecnologia/cabos-de-rede/")))
-
-
 # Requisito 5
 def get_tech_news(amount):
-    """Seu código deve vir aqui"""
+    first_page = fetch("https://blog.betrybe.com/")
+    news_links = scrape_updates(first_page)
+    next_link = scrape_next_page_link(first_page)
+    while len(news_links) < amount:
+        next_page = fetch(next_link)
+        news_links.extend(scrape_updates(next_page))
+        next_link = scrape_next_page_link(next_page)
+    news = [scrape_news(fetch(link)) for link in news_links[:amount]]
+    create_news(news)
+    return news
