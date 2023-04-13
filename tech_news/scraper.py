@@ -1,12 +1,10 @@
 import requests
 import time
-# from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup
 
 HEADERS = {
     "user-agent": "Fake user-agent"
 }
-
-HTML = str
 
 
 # Requisito 1
@@ -23,7 +21,13 @@ def fetch(url):
 
 # Requisito 2
 def scrape_updates(html_content):
-    """Seu código deve vir aqui"""
+    soup = BeautifulSoup(
+        html_content, "html.parser").find("div", {"class": "archive-main"})
+    links = []
+    if html_content != "":
+        for post in soup.find_all("article"):
+            links.append(post.find("h2", {"class": "entry-title"}).a["href"])
+    return links
 
 
 # Requisito 3
