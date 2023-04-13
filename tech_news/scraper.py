@@ -1,6 +1,6 @@
 import requests
 import time
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 
 HEADERS = {
     "user-agent": "Fake user-agent"
@@ -11,7 +11,14 @@ HTML = str
 
 # Requisito 1
 def fetch(url):
-    """Seu código deve vir aqui"""
+    try:
+        response = requests.get(url, headers=HEADERS, timeout=3)
+        time.sleep(1)
+        if response.status_code != 200:
+            return None
+        return response.text
+    except requests.Timeout:
+        return None
 
 
 # Requisito 2
