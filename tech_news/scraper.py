@@ -1,3 +1,14 @@
+import requests
+import time
+from bs4 import BeautifulSoup
+
+HEADERS = {
+    "user-agent": "Fake user-agent"
+}
+
+HTML = str
+
+
 # Requisito 1
 def fetch(url):
     """Seu código deve vir aqui"""
