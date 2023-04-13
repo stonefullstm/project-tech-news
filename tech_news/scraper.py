@@ -44,7 +44,34 @@ def scrape_next_page_link(html_content):
 
 # Requisito 4
 def scrape_news(html_content):
-    """Seu código deve vir aqui"""
+    soup = BeautifulSoup(html_content, "html.parser")
+    link = soup.head.find("link", {"rel": "canonical"})["href"]
+    title = soup.find("h1", {"class": "entry-title"}).string.strip()
+    post_meta = soup.find("ul", {"class": "post-meta"})
+    timestamp = post_meta.find("li", {"class": "meta-date"}).string
+    writer = post_meta.find(
+        "li", {"class": "meta-author"}
+        ).find("span", {"class": "author"}).a.string
+    reading_time_txt = post_meta.find(
+        "li", {"class": "meta-reading-time"}
+        ).contents[1]
+    reading_time = "".join(char for char in reading_time_txt if char.isdigit())
+    summary = soup.find("div", {"class": "entry-content"}).p.text.strip()
+    category = soup.find(
+        "div", {"class": "meta-category"}
+        ).find("span", {"class": "label"}).string
+    return {
+        "url": link,
+        "title": title,
+        "timestamp": timestamp,
+        "writer": writer,
+        "reading_time": int(reading_time),
+        "summary": summary,
+        "category": category,
+    }
+
+
+# print(scrape_news(fetch("https://blog.betrybe.com/tecnologia/cabos-de-rede/")))
 
 
 # Requisito 5
